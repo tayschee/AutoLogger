@@ -1,9 +1,6 @@
 import React, { useState } from 'react'; 
 import { View, StyleSheet, Text, Pressable, TextInput, Image} from 'react-native'; 
-import { SafeAreaView } from 'react-native-safe-area-context';
-import PlayButton from '@/components/playButton';
-import AddButton from './AddButton';
-import Button from './button';
+import { saveAccount } from '@/utils/StoringElement';
 
 export default function AccountForm({quitFunction}) {
   //console.log(props)
@@ -34,8 +31,8 @@ export default function AccountForm({quitFunction}) {
             <View style={styles.margin}/>
             
             <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => console.log("hello")}>
+                style={styles.button}
+                onPress={() => saveAccount()}>
                 <Text style={styles.textStyle}>Add this account</Text>
             </Pressable>
         </View>

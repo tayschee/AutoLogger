@@ -4,6 +4,15 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 // import TextButton from '@/components/textButton';
 import AddBar from '@/components/AddBar'
 
+// import { MMKV } from 'react-native-mmkv'
+
+// export const storage = new MMKV({
+//   id: "storage",
+//   //path: `${USER_DIRECTORY}/storage`,
+//   //encryptionKey: 'hunter2',
+//   //mode: Mode.MULTI_PROCESS,
+// })
+
 export default function Main() {
   const list = [ 
     {
@@ -97,24 +106,7 @@ export default function Main() {
       date: "01/12/08"
     },
   ]
-  // return (
-  //   <View style={styles.app}>
-  //     <SafeAreaView style={styles.app}>
-  //       <StatusBar
-  //           animated={true}
-  //           backgroundColor="#61dafb"
-  //           // barStyle={statusBarStyle}
-  //           hidden={false}
-  //           />
-  //       <View style={styles.list}>
-  //         <LogList list={list}/>
-  //       </View>
-  //     </SafeAreaView>
-  //     <View style={styles.bottomBar}>
-  //       <AddBar/>
-  //     </View>
-  //   </View>
-  // );
+  
   return (
     <SafeAreaView style={styles.app}>
       <StatusBar
