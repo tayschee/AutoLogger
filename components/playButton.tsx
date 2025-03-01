@@ -1,9 +1,22 @@
 import React, { Children } from 'react'; 
-import { View, StyleSheet, TouchableHighlight, Pressable} from 'react-native'; 
+import { View, StyleSheet, TouchableHighlight, Pressable} from 'react-native';
+import { mapAutoLog } from '@/constants/gameFunctionMap';
+import IAutoLogResult from '@/interfaces/IAutoLogResult';
 
-export default function PlayButton({style}) {
-  
-  let play = () => {console.log("playButton")}
+export default function PlayButton({style, data, updateFunction}) {
+  let dataList = data.get();
+  let play = async () => {
+    for (let i = 0; i < dataList.length; i++) {
+      console.log("hello")
+      const autoLogResult: Promise<IAutoLogResult> = mapAutoLog.get(dataList[i].game)(dataList[i])
+      autoLogResult.then((autoLogResult) => {
+        console.log(autoLogResult)
+        updateFunction(i, autoLogResult)
+      })
+      .catch()
+    }
+    
+  }
 
   return (
     <Pressable style={style} onPressIn={play}></Pressable>

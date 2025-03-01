@@ -3,23 +3,24 @@ import { View, StyleSheet, TouchableHighlight, Pressable, Modal, Text, Alert, Te
 import AccountForm from './AccountForm';
 
 
-export default function AddButton({style}) {
+export default function AddButton({style, addFunction}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [usernameOrEmail, onChangeUsernameOrEmail] = useState("Test");
-  let add = () => {console.log("addButton"); setModalVisible(!modalVisible)}
+  let modalVisibleSwitch = () => {setModalVisible(!modalVisible)}
 
   return (
-    <Pressable style={style} underlayColor={'grey'} onPressIn={add}>
+    <Pressable style={style} underlayColor={'grey'} onPress={modalVisibleSwitch}>
         <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
             Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
+            modalVisibleSwitch()
           }}>
             <AccountForm
-              quitFunction={() => setModalVisible(!modalVisible)}
+              quitFunction={modalVisibleSwitch}
+              addFunction={addFunction}
             />
         </Modal>
     </Pressable>

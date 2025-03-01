@@ -11,12 +11,12 @@ export default function logList(props)
             ItemSeparatorComponent={ (({highlighted}) => (<View style={styles.separator}></View>))}
             ListFooterComponent={() => (<Text style={styles.endList}>No more element, you can add it</Text>)}
             initialNumToRender={20}
-            data={props.list}
-            getItem={(data: any, index:number) => {console.log(data[index]); return data[index]}}
+            data={props.data.get()}
+            getItem={(data: any, index:number) => {return data[index]}}
             getItemCount={(data: any) => data.length}
             keyExtractor={item => item.id}
             renderItem={({item, index, separators}) => (
-              <TextButton gameName={item.gameName} emailOrUsername={item.emailOrUsername}/>
+              <TextButton item={item}/>
             )}
         />
       </View>

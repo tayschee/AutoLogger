@@ -1,11 +1,10 @@
 import React, { useState } from 'react'; 
 import { View, StyleSheet, Text, Pressable, TextInput, Image} from 'react-native'; 
-import { saveAccount } from '@/utils/StoringElement';
 
-export default function AccountForm({quitFunction}) {
-  //console.log(props)
+export default function AccountForm({quitFunction, addFunction}) {
   const [usernameOrEmail, onChangeUsernameOrEmail] = useState("Test");
-
+  const [password, onChangePassword] = useState("Test");
+  const game = "AmourSucreNewGen"
 
   return (
     <View style={styles.centeredView}>
@@ -15,6 +14,7 @@ export default function AccountForm({quitFunction}) {
             </Pressable>
             <Text style={styles.title}>email or username</Text>
             <TextInput
+            secureTextEntry={false}
             style={styles.input}
             onChangeText={onChangeUsernameOrEmail}
             value={usernameOrEmail}/>
@@ -25,14 +25,17 @@ export default function AccountForm({quitFunction}) {
             <TextInput
             secureTextEntry={true}
             style={styles.input}
-            onChangeText={onChangeUsernameOrEmail}
-            value={usernameOrEmail}/>
+            onChangeText={onChangePassword}
+            value={password}/>
             
             <View style={styles.margin}/>
             
             <Pressable
                 style={styles.button}
-                onPress={() => saveAccount()}>
+                onPress={() => {
+                    addFunction(game, usernameOrEmail, password)
+                    quitFunction()
+                }}>
                 <Text style={styles.textStyle}>Add this account</Text>
             </Pressable>
         </View>
