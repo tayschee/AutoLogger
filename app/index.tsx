@@ -7,78 +7,112 @@ import PlayButton from '@/components/playButton';
 import AddButton from '@/components/AddButton';
 import DeleteButton from '@/components/DeleteButton';
 
-import Data from '@/utils/StoringElement';
 import React, { useState } from 'react';
+import IAccountUI from '@/interfaces/IAccountUI';
+import IMain from '@/interfaces/IMain';
+import { MMKV } from 'react-native-mmkv';
+import IAccount from '@/interfaces/IAccount';
+import { IModeSelected } from '@/interfaces/IModeSelected';
 
+type Props = undefined
 
-export default function Main() {
-  const [data, setData] = useState(new Data())
-  
-  return (
-    <SafeAreaView style={styles.app}>
-      <StatusBar
-          animated={true}
-          backgroundColor="#61dafb"
-          // barStyle={statusBarStyle}
-          hidden={false}
-          />
-      <View style={styles.list}>
-        <LogList data={data}/>
-      </View>
-      <BottomBar>
-        <PlayButton style={styles.runButton} data={data} updateFunction={(index, partialInfo) => {setData(() => {data.update(index, partialInfo); return data.copy();})}}/>
-        <AddButton style={styles.addButton}
-                  addFunction={(game, usernameOrEmail, password) =>
-          setData(() => {data.set(game, usernameOrEmail, password); return data.copy();})}/>
-        <DeleteButton style={styles.deleteButton}
-                  deleteFunction={() =>
-          setData(() => {data.clear(); return data.copy();})}/>
-      </BottomBar>
-    </SafeAreaView>
-  );
-}
+export default class Main extends React.Component<Props, IMain> {
+  private storage = new MMKV();
 
-const styles = StyleSheet.create({
-  app: {
-    flexDirection: "column",
-    flex:1
-  },
-  row: {
-    flexDirection: "row",
-    flex:1
-  },
-  list: {
-    flex: 0.9,
-  },
-  bottomBar: {
-    flex: 0.1,
-  },
-  buttonBg: {
-    flex: 0.5,
-    backgroundColor: "blue"
-  },
-  button: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center"
-  },
-  runButton: {
-    backgroundColor: "black",
-    borderRadius: "50%",
-    padding: 35,
-    marginVertical: "auto"
-  },
-  addButton: {
-    backgroundColor: "grey",
-    borderRadius: "50%",
-    padding: 25,
-    marginVertical: "auto",
-  },
-  deleteButton: {
-    backgroundColor: "red",
-    borderRadius: "50%",
-    padding: 25,
-    marginVertical: "auto",
-    marginHorizontal: 200
+  constructor(props: Props) {
+    super(props)
+
+    const accountList: IAccount[] = JSON.parse(this.storage.getString("data") ?? "[]")
+    this.state = {
+      accountList: accountList.map(item => ({...item, selected: false})),
+      mode: "default",
+    }
   }
-});
+
+  setAccountList = (array: IAccountUI[]) =>
+  {
+    this.setState((prevState) => ({...prevState, accountList: array}))
+    this.storage.set("data", JSON.stringify(array))
+  }
+  setMode = (mode: IModeSelected) => {
+    this.setState((prevState) => ({...prevState, mode: mode }))
+  }
+
+  switchMode = (id: number) => {
+    if (this.state.mode === "default") {
+      this.setMode("select")
+      this.addSelectedAccount(id)
+    }
+    else {
+      this.setMode("default")
+      this.setAccountList(this.state.accountList.map((item: IAccountUI) => ({...item, selected: false})))
+    }
+  }
+  addSelectedAccount = (id: number) => {
+    const account: IAccountUI = this.state.accountList.find((item, index) => id === item.id)!
+    account.selected = !account.selected
+    this.setState((prevState) => ({...prevState, accountList: this.state.accountList}))
+  }
+
+  private mapMode = new Map<IModeSelected, Function>([
+    ["default", () => {console.log("default")}],
+    ["select", this.addSelectedAccount]
+  ])
+
+  render() {
+    const styles = StyleSheet.create({
+      app: {
+        flexDirection: "column",
+        flex:1
+      },
+      row: {
+        flexDirection: "row",
+        flex:1
+      },
+      list: {
+        flex: 2,
+      },
+      buttonBg: {
+        flex: 0.5,
+        backgroundColor: "blue"
+      },
+      button: {
+        width: "100%",
+        height: "100%",
+        justifyContent: "center"
+      },
+      deleteButton: {
+        backgroundColor: "red",
+        borderRadius: "50%",
+        padding: 25,
+        marginVertical: "auto",
+        marginHorizontal: 200,
+        flex: 0.9
+      }
+    })
+
+    return (
+      <SafeAreaView style={styles.app}>
+        <StatusBar
+            animated={true}
+            backgroundColor="#61dafb"
+            // barStyle={statusBarStyle}
+            hidden={false}
+            />
+        <View style={styles.list}>
+          <LogList data={this.state} switchMode={this.switchMode} onPress={this.mapMode.get(this.state.mode)}/>
+        </View>
+        <BottomBar>
+          <PlayButton data={this.state.accountList} updateFunction={this.setAccountList}/>
+          { this.state.mode === "default" ?
+            <AddButton  data={this.state} addFunction={this.setAccountList}/>
+            :
+            <DeleteButton style={styles.deleteButton}
+                    data={this.state}
+                    deleteFunction={(array: IAccountUI[]) => {this.setMode("default"); this.setAccountList(array)}}/>
+          }
+        </BottomBar>
+      </SafeAreaView>
+    );
+  }
+};

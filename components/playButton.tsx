@@ -1,17 +1,17 @@
 import React, { Children } from 'react'; 
-import { View, StyleSheet, TouchableHighlight, Pressable} from 'react-native';
+import { View, StyleSheet, Image, Pressable} from 'react-native';
 import { mapAutoLog } from '@/constants/gameFunctionMap';
 import IAutoLogResult from '@/interfaces/IAutoLogResult';
+import {styles} from "@/assets/styles/mainButtonStyle"
 
-export default function PlayButton({style, data, updateFunction}) {
-  let dataList = data.get();
+
+export default function PlayButton({data, updateFunction}) {
   let play = async () => {
     for (let i = 0; i < dataList.length; i++) {
-      console.log("hello")
-      const autoLogResult: Promise<IAutoLogResult> = mapAutoLog.get(dataList[i].game)(dataList[i])
+      const autoLogResult: Promise<IAutoLogResult> = mapAutoLog.get(data[i].game)!(dataList[i])
       autoLogResult.then((autoLogResult) => {
-        console.log(autoLogResult)
-        updateFunction(i, autoLogResult)
+        dataList[i] = {...dataList[i], autoLogResult}
+        updateFunction(...dataList)
       })
       .catch()
     }
@@ -19,21 +19,11 @@ export default function PlayButton({style, data, updateFunction}) {
   }
 
   return (
-    <Pressable style={style} onPressIn={play}></Pressable>
+    // <View style={styles.backCircle}>
+    <Pressable style={styles.frontCircle} onPressIn={play}>
+      {/* <View style={styles.playLogo}/> */}
+        <Image resizeMethod='resize' resizeMode="contain" style={styles.playLogo} source={require("@/assets/images/play2.png")}/>
+    </Pressable>
+    // </View>
   )
 }
-
-const styles = StyleSheet.create({
-  circle: {
-    // flex:0.5,
-    // position: "relative",
-    backgroundColor: "black",
-    borderRadius: "50%",
-    padding: 35,
-    //width: "100%",
-    //height: "100%",
-    marginHorizontal: "auto",
-    marginVertical: "auto"
-    // marginBottom: "7.5%"
-  }
-})

@@ -1,49 +1,73 @@
+import IAccountUI from '@/interfaces/IAccountUI';
 import React, { useState } from 'react'; 
-import { View, StyleSheet, Text, Pressable, TextInput, Image} from 'react-native'; 
+import { View, StyleSheet, Text, Pressable, TextInput, Image} from 'react-native';
+import {styles} from "@/assets/styles/accountButton.ts"
 
-export default function AccountForm({quitFunction, addFunction}) {
-  const [usernameOrEmail, onChangeUsernameOrEmail] = useState("Test");
-  const [password, onChangePassword] = useState("Test");
+export default function AccountForm({data, quitFunction, addFunction}) {
+  const [usernameOrEmail, onChangeUsernameOrEmail] = useState(undefined);
+  const [password, onChangePassword] = useState(undefined);
   const game = "AmourSucreNewGen"
 
+  const defaultStyle = [
+        //styles.background,
+        //styles.margin,
+        styles.border,
+        styles.color,
+        //styles.noStateBorder
+      ]
+
   return (
-    <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-            <Pressable style={styles.closeButton} onPress={() => quitFunction()}>
+    <View style={styles2.centeredView}>
+        <View style={styles2.modalView}>
+            <Pressable style={styles2.closeButton} onPress={() => quitFunction()}>
               <Image source={require("@/assets/images/deleteButton.png")}/>
             </Pressable>
-            <Text style={styles.title}>email or username</Text>
-            <TextInput
-            secureTextEntry={false}
-            style={styles.input}
-            onChangeText={onChangeUsernameOrEmail}
-            value={usernameOrEmail}/>
+            <View>
+              <Text style={styles2.title}>email/username</Text>
+              <TextInput
+              style={defaultStyle}
+              autoCorrect={false}
+              inputMode={"text"}
+              secureTextEntry={false}
+              onChangeText={onChangeUsernameOrEmail}
+              defaultValue='test2'
+              value={usernameOrEmail}/>
+            </View>
 
-            <View style={styles.margin}/>
-
-            <Text style={styles.title}>password</Text>
-            <TextInput
-            secureTextEntry={true}
-            style={styles.input}
-            onChangeText={onChangePassword}
-            value={password}/>
+            <View style={styles2.margin}/>
+            <View>
+              <Text style={styles2.title}>password</Text>
+              <TextInput
+              style={defaultStyle}
+              autoCorrect={false}
+              inputMode={"text"}
+              secureTextEntry={true}
+              onChangeText={onChangePassword}
+              defaultValue='test2'
+              value={password}/>
+            </View>
             
-            <View style={styles.margin}/>
+            <View style={styles2.margin}/>
+            <View style={styles2.margin}/>
+            <View style={styles2.margin}/>
+          
             
             <Pressable
-                style={styles.button}
+                style={styles2.button}
                 onPress={() => {
-                    addFunction(game, usernameOrEmail, password)
+                    const newElement: IAccountUI =  {id: data.accountList.length, game: game, usernameOrEmail: usernameOrEmail, password: password, selected: false}
+                    data.accountList.push(newElement)
+                    addFunction(data.accountList)
                     quitFunction()
                 }}>
-                <Text style={styles.textStyle}>Add this account</Text>
+                <Text style={styles2.textStyle}>Add this account</Text>
             </Pressable>
         </View>
     </View>
   )
 }
 
-const styles = StyleSheet.create({
+const styles2 = StyleSheet.create({
     circle: {
       // flex:0.5,
       // position: "relative",
@@ -67,7 +91,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       borderRadius: 20,
       padding: 35,
-      alignItems: 'center',
+      paddingTop: 50,
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
@@ -114,7 +138,11 @@ const styles = StyleSheet.create({
       marginBottom: 10
     },
     closeButton: {
-      position: "relative",
+      position: "absolute",
+      // width: "100%",
+      // maxWidth: "100%",
+      // maxHeight: "100%",
+      // aspectRatio: 1,
       top: 0,
       right: 0
     }

@@ -88,22 +88,15 @@ async function collect(apiKey: String): Promise<IAutoLogResult> {
 }
 
 export default async function AmourSucreNewGenAutoLog(gameLogInfo): Promise<IAutoLogResult> {
-    let autoLogResult: Promise<IAutoLogResult> = {  succeed: false,
+    let autoLogResult: Promise<IAutoLogResult> = { 
+                                                    succeed: false,
                                                     message: "Error not documented",
                                                     date: new Date(Date.now().toString())
                                                 }
     autoLogResult = connection(gameLogInfo)
-    .then((apiKey) => {return collect(apiKey)})
-    .catch((autoLogBadResult) => (autoLogResult = autoLogBadResult))
+                    .then((apiKey) => {return collect(apiKey)})
+                    .catch((autoLogBadResult) => {return autoLogBadResult})
+                    .catch(() => {return autoLogResult})
 
     return autoLogResult
 }
-
-// export default async function AmourSucreNewGenAutoLog(gameLogInfo: gameLogInfo): Promise<IAutoLogResult> {
-//     const autoLogResult : IAutoLogResult = {
-//         succeed: false,
-//         message: "tout fonctionne a merveille",
-//         date: new Date(Date.now()).toDateString()
-//     }
-//     return autoLogResult
-// }

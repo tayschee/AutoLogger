@@ -1,69 +1,64 @@
 import React, { useState } from 'react'; 
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
 import Button from '@/components/button';
+import {styles} from "@/assets/styles/accountButton.ts"
+import { IModeSelected } from '@/interfaces/IModeSelected';
+import IAccountUI from '@/interfaces/IAccountUI';
 
-
-
-export default function TextButton(props) {
-
-  const colorChoice = () =>  { return props.item.succeed === true ? styles.succeedBackground :
-                                        props.item.succeed === false ? styles.unsucceedBackground :
-                                        styles.background }
-  const [logVisible, setLogVisible] = useState(false)
-  const switchLogVisible = () => {setLogVisible(!logVisible)}
-
-  const date = new Date(props.item.date)
-  console.log(date)
-
-  return (
-    <View>
-      <TouchableHighlight style={colorChoice()} underlayColor={'grey'} onPress={switchLogVisible}>
-          <Text>{props.item.game}: {props.item.usernameOrEmail}</Text>
-      </TouchableHighlight>
-      {
-        logVisible ?
-        <TouchableHighlight style={styles.logBackground} underlayColor={'grey'} onPress={props.onPress}>
-          <Text>{Number.isNaN(date.valueOf()) ? "": date.toLocaleTimeString("Fr-fr")} {props.item.message}</Text>
-        </TouchableHighlight>
-        :false
-      }
-    </View>
-  )
+interface Props {
+  item: IAccountUI,
+  switchMode: Function
+  onPress: Function
 }
 
-const styles = StyleSheet.create({
-  image: {
-    marginHorizontal: "auto",
-  },
-  background: {
-    backgroundColor: '#B4BAB1',
-    // boxShadow: "-5px -5px 5px grey",
-    borderRadius: 15,
-    padding: 20,
-    marginHorizontal: 5,
-    borderTopColor: '#B4BAB1'
-  },
-  succeedBackground: {
-    backgroundColor: "#61dafb",
-    // boxShadow: "-5px -5px 5px grey",
-    borderRadius: 15,
-    padding: 20,
-    marginHorizontal: 5,
-  },
-  unsucceedBackground: {
-    backgroundColor: "#CA3C66",
-    // boxShadow: "-5px -5px 5px grey",
-    borderRadius: 15,
-    padding: 20,
-    marginHorizontal: 5,
-  },
-  logBackground: {
-    backgroundColor: '#B4BAB1',
-    // boxShadow: "-5px -5px 5px grey",
-    borderBottomRightRadius: 15,
-    borderBottomLeftRadius: 15,
-    borderTopLeftRadius: -15,
-    padding: 20,
-    marginHorizontal: 5,
-  },
-})
+interface State {
+  logVisible: boolean,
+  modeSelected: IModeSelected,
+}
+
+export default class TextButton extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      logVisible: false,
+      modeSelected: "default",
+    }
+  }
+
+  switchModeSelected = () => this.setState({modeSelected: this.state.modeSelected === "default" ? "select": "default"})
+
+  colorChoice() { 
+    return this.props.item.succeed === true ?
+    styles.succeedBorder :
+    this.props.item.succeed === false ?
+    styles.unsucceedBorder :
+    styles.noStateBorder 
+  }
+
+  render() {
+    const defaultStyle = [
+      styles.background,
+      styles.margin,
+      styles.border,
+      this.props.item.selected === true ? styles.selectedColor : styles.color,
+      this.colorChoice(),     
+    ]
+    const date = new Date(this.props.item.date)
+    return (
+      <View>
+        {
+            <TouchableHighlight style={defaultStyle} underlayColor={'grey'} onPress={() => this.props.onPress(this.props.item.id)} onLongPress={() => this.props.switchMode(this.props.item.id)}>
+              { this.state.logVisible === true ?   
+                <View>
+                  <Text style={[styles.background, styles.transparency, this.colorChoice(), styles.padding, styles.bottomBorder]}>{this.props.item.game}: {this.props.item.usernameOrEmail}</Text>
+                  <Text style={styles.padding}>{Number.isNaN(date.valueOf()) ? "": date.toLocaleTimeString("Fr-fr")} {this.props.item.message}</Text>
+                </View>  
+                :
+                <Text style={styles.padding}>{this.props.item.game}: {this.props.item.usernameOrEmail}</Text>
+              }
+            </TouchableHighlight>
+        }
+      </View>
+    )
+  }
+}
