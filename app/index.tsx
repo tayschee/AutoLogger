@@ -45,7 +45,7 @@ export default class Main extends React.Component<Props, IMain> {
     }
     else {
       this.setMode("default")
-      this.setAccountList(this.state.accountList.map((item: IAccountUI) => ({...item, selected: false})))
+      //this.setAccountList(this.state.accountList.map((item: IAccountUI) => ({...item, selected: false})))
     }
   }
   addSelectedAccount = (id: number) => {
@@ -55,11 +55,12 @@ export default class Main extends React.Component<Props, IMain> {
   }
 
   private mapMode = new Map<IModeSelected, Function>([
-    ["default", () => {console.log("default")}],
+    ["default", () => null],
     ["select", this.addSelectedAccount]
   ])
 
   render() {
+    console.log("mode: ", this.state.mode)
     const styles = StyleSheet.create({
       app: {
         flexDirection: "column",
@@ -100,10 +101,10 @@ export default class Main extends React.Component<Props, IMain> {
             hidden={false}
             />
         <View style={styles.list}>
-          <LogList data={this.state} switchMode={this.switchMode} onPress={this.mapMode.get(this.state.mode)}/>
+          <LogList {...this.state} switchMode={this.switchMode} onPress={this.mapMode.get(this.state.mode)}/>
         </View>
         <BottomBar>
-          <PlayButton data={this.state.accountList} updateFunction={this.setAccountList}/>
+          <PlayButton accountList={this.state.accountList} updateFunction={this.setAccountList}/>
           { this.state.mode === "default" ?
             <AddButton  data={this.state} addFunction={this.setAccountList}/>
             :

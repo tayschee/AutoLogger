@@ -4,15 +4,15 @@ import { View, StyleSheet, Text, Pressable, TextInput, Image} from 'react-native
 import {styles} from "@/assets/styles/accountButton.ts"
 
 export default function AccountForm({data, quitFunction, addFunction}) {
-  const [usernameOrEmail, onChangeUsernameOrEmail] = useState(undefined);
-  const [password, onChangePassword] = useState(undefined);
+  const [usernameOrEmail, onChangeUsernameOrEmail] = useState("");
+  const [password, onChangePassword] = useState("");
   const game = "AmourSucreNewGen"
 
   const defaultStyle = [
         //styles.background,
         //styles.margin,
         styles.border,
-        styles.color,
+        // styles.color,
         //styles.noStateBorder
       ]
 
@@ -30,7 +30,6 @@ export default function AccountForm({data, quitFunction, addFunction}) {
               inputMode={"text"}
               secureTextEntry={false}
               onChangeText={onChangeUsernameOrEmail}
-              defaultValue='test2'
               value={usernameOrEmail}/>
             </View>
 
@@ -43,7 +42,6 @@ export default function AccountForm({data, quitFunction, addFunction}) {
               inputMode={"text"}
               secureTextEntry={true}
               onChangeText={onChangePassword}
-              defaultValue='test2'
               value={password}/>
             </View>
             
@@ -55,7 +53,9 @@ export default function AccountForm({data, quitFunction, addFunction}) {
             <Pressable
                 style={styles2.button}
                 onPress={() => {
-                    const newElement: IAccountUI =  {id: data.accountList.length, game: game, usernameOrEmail: usernameOrEmail, password: password, selected: false}
+                  console.log(data)
+                    const id = data.accountList.length > 0 ? data.accountList[data.accountList.length -1].id + 1: 0
+                    const newElement: IAccountUI =  {id: id, game: game, usernameOrEmail: usernameOrEmail, password: password, selected: false, message: "Account add to the database", date: new Date(Date.now()).toString() }
                     data.accountList.push(newElement)
                     addFunction(data.accountList)
                     quitFunction()

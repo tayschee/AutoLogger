@@ -1,10 +1,7 @@
 import IAutoLogResult from "@/interfaces/IAutoLogResult"
-
-interface gameLogInfo {
-    usernameOrEmail: String,
-    password: String,
-    date: Date
-}
+import IAmourSucreNewGenLog from "./IAmourSucreNewGenLog"
+import IAccount from "@/interfaces/IAccount"
+import IAccountUI from "@/interfaces/IAccountUI"
 
 function logout(headers: Headers, succeed: boolean, message: String): IAutoLogResult
 {
@@ -46,7 +43,7 @@ async function connection(gameLogInfo): Promise<string> {
     return apiKey
 }
 
-async function findDayToCollect(apiKey: String): Promise<Number> {
+async function findDayToCollect(apiKey: string): Promise<Number> {
     const headers: Headers = new Headers({
         "Authorization": `Bearer ${apiKey}`
     })
@@ -87,13 +84,27 @@ async function collect(apiKey: String): Promise<IAutoLogResult> {
     return logout(headers, true, "PA collected")
 }
 
-export default async function AmourSucreNewGenAutoLog(gameLogInfo): Promise<IAutoLogResult> {
+// async function autoPlayEventGame(apiKey: String): {
+//     const headers: Headers = new Headers({
+//         "Authorization": `Bearer ${apiKey}`
+//     })
+
+//     const request = new Request("https://api.amoursucre-newgen.com/api/connection-calendar/collect", {
+//         method: "POST",
+//         headers: headers,
+//         body: JSON.stringify({})
+//     })
+
+//     return logout(headers, true, "PA collected and minigame play")
+// }
+
+export default function AmourSucreNewGenAutoLog(gameInfo: IAccountUI): Promise<IAutoLogResult> {
     let autoLogResult: Promise<IAutoLogResult> = { 
                                                     succeed: false,
                                                     message: "Error not documented",
                                                     date: new Date(Date.now().toString())
                                                 }
-    autoLogResult = connection(gameLogInfo)
+    autoLogResult = connection(gameInfo)
                     .then((apiKey) => {return collect(apiKey)})
                     .catch((autoLogBadResult) => {return autoLogBadResult})
                     .catch(() => {return autoLogResult})

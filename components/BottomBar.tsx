@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-na
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PlayButton from '@/components/playButton';
 import AddButton from './AddButton';
-import {darkGrey} from "@/assets/styles/color.ts"
+import {darkGrey} from "@/constants/color.ts"
 
 
 export default function BottomBar(props) {

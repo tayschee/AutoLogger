@@ -9,14 +9,13 @@ interface Props {
   item: IAccountUI,
   switchMode: Function
   onPress: Function
-  mode: IModeSelected
 }
 
 interface State {
   logVisible: boolean,  
 }
 
-export default class TextButton extends React.Component<Props, State> {
+export default class AccountButton extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -24,10 +23,7 @@ export default class TextButton extends React.Component<Props, State> {
     }
   }
 
-  private mapMode = new Map<IModeSelected, Function>([
-    ["default", () => this.setState({logVisible: !this.state.logVisible})],
-    ["select", () => null]
-  ])
+  switchModeSelected = () => this.setState({modeSelected: this.state.modeSelected === "default" ? "select": "default"})
 
   colorChoice() { 
     return this.props.item.succeed === true ?
@@ -42,15 +38,15 @@ export default class TextButton extends React.Component<Props, State> {
       styles.background,
       styles.margin,
       styles.border,
+      styles.padding,
       this.props.item.selected === true ? styles.selectedColor : styles.color,
       this.colorChoice(),     
     ]
     const date = new Date(this.props.item.date)
-    console.log("mode:", this.props.mode)
     return (
       <View>
         {
-            <Pressable style={defaultStyle} underlayColor={'grey'} onPress={() => {this.mapMode.get(this.props.mode)!(); this.props.onPress(this.props.item.id)}} onLongPress={() => this.props.switchMode(this.props.item.id)}>
+            <Pressable style={defaultStyle} underlayColor={'grey'} onPress={() => this.props.onPress(this.props.item.id)} onLongPress={() => this.props.switchMode(this.props.item.id)}>
               { this.state.logVisible === true ?   
                 <View>
                   <Text style={[styles.background, styles.transparency, this.colorChoice(), styles.padding, styles.bottomBorder]}>{this.props.item.game}: {this.props.item.usernameOrEmail}</Text>

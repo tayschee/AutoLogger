@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import {darkGrey, lightGrey, blue, red, white, black} from '@/assets/styles/color'
+import {darkGrey, lightGrey, blue, red, white, black} from '@/constants/color.ts'
 
 
 const circleSize = 125
