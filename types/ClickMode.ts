@@ -1,0 +1,1 @@
+export type ClickMode = "default" | "select"

@@ -1,7 +1,7 @@
 import IAccountUI from "@/interfaces/IAccountUI";
-import { IModeSelected } from "@/interfaces/IModeSelected";
+import { ClickMode } from "@/interfaces/ClickMode";
 
 export default interface IMain {
     accountList: IAccountUI[],
-    mode: IModeSelected
+    mode: ClickMode
   }

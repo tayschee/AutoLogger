@@ -9,22 +9,22 @@ import {darkGrey} from "@/constants/color.ts"
 export default function BottomBar(props) {
   return (
     <View style={styles.bottomBar}>
-        {props.children}
-        {/* <View style={styles.bottomBarButton}>{props.children}</View> */}
+      {props.children}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   bottomBar: {
-    borderColor: "red",
-    borderWidth: 1,
+    position: "absolute",
+    width: "100%",
+    height: "10%",
+    bottom: 0,
     backgroundColor: "#31363F",
-    flex: 0.125,
-    borderTopLeftRadius: 100,
-    borderTopRightRadius: 100,
+    borderTopLeftRadius: 75,
+    borderTopRightRadius: 75,
     // alignItems: "center", //centrer horizontalement
     justifyContent: "center", //centrer verticalement enfant
     flexDirection: "row",
-  },
+  }
 })

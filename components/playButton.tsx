@@ -11,19 +11,17 @@ export default function PlayButton({accountList, updateFunction}) {
     const newArray = [...accountList]
     for (let i = 0; i < accountList.length; i++) {
       mapAutoLog.get(accountList[i].game)!(accountList[i]).then((autoLogResult: IAutoLogResult) => { 
-        console.log("autoLogresult:", autoLogResult)  
         newArray[i] = {...newArray[i], ...autoLogResult}
-        console.log("new array", newArray[i])
         updateFunction([...newArray])
       })
-      .catch(() => (console.log("ERRRRRRRRROOOOOOOOOOOOOOOORRRRRRRRR")))
+      .catch(() => null)
     }
 
   }
 
   return (
     <Pressable style={styles.frontCircle} onPress={play}>
-        <Image resizeMethod='resize' resizeMode="contain" style={styles.playLogo} source={require("@/assets/images/play2.png")}/>
+        <Image resizeMethod='resize' resizeMode="contain" style={styles.playLogo} source={require("@/assets/images/play.png")}/>
     </Pressable>
   )
 }

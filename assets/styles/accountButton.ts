@@ -2,11 +2,10 @@ import { StyleSheet } from 'react-native';
 import {darkGrey, lightGrey, blue, red, white, black} from '@/constants/color.ts'
 
 
-const circleSize = 50
 export const styles = StyleSheet.create({
   background: {
     // boxShadow: "-5px -5px 5px grey",
-    borderRadius: 15,
+    borderRadius: 20,
   },
   color: {
     backgroundColor: white,

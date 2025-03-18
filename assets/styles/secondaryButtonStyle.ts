@@ -16,13 +16,13 @@ export const styles = StyleSheet.create({
     transform: [{ translateY: -circleSize/1.75 }],
     //boxShadow: `inset 0 -5 3 15 ${lightGrey}`,
     justifyContent: "center", //centrer verticalement enfant
-    alignItems: "center" //centrer horizontalement enfant
+    alignItems: "center", //centrer horizontalement enfant
+    position: "relative"
   },
-  logo: {
-    width: "100%",
-    aspectRatio: 1,
-    maxWidth: "100%",
-    maxHeight: "100%",
-    top: 2 //
+  plusLogo: {
+    aspectRatio: 0.075
+  },
+  trashLogo: {
+    aspectRatio: 0.05,
   },
 })

@@ -1,4 +1,4 @@
-import LogList from '@/components/logList';
+import LogList from '@/components/AccountList';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 // import TextButton from '@/components/textButton';
@@ -12,12 +12,18 @@ import IAccountUI from '@/interfaces/IAccountUI';
 import IMain from '@/interfaces/IMain';
 import { MMKV } from 'react-native-mmkv';
 import IAccount from '@/interfaces/IAccount';
-import { IModeSelected } from '@/interfaces/IModeSelected';
+import { ClickMode } from '@/interfaces/ClickMode';
+import AccountList from '@/components/AccountList';
+import { bottomBarStyles } from '@/assets/styles/bottomBarStyles';
+import { blue } from '@/constants/color';
 
 type Props = undefined
 
 export default class Main extends React.Component<Props, IMain> {
-  private storage = new MMKV();
+  private storage = new MMKV({
+    id: "data",
+    encryptionKey: 'hunter2'
+  });
 
   constructor(props: Props) {
     super(props)
@@ -34,7 +40,7 @@ export default class Main extends React.Component<Props, IMain> {
     this.setState((prevState) => ({...prevState, accountList: array}))
     this.storage.set("data", JSON.stringify(array))
   }
-  setMode = (mode: IModeSelected) => {
+  setMode = (mode: ClickMode) => {
     this.setState((prevState) => ({...prevState, mode: mode }))
   }
 
@@ -45,7 +51,7 @@ export default class Main extends React.Component<Props, IMain> {
     }
     else {
       this.setMode("default")
-      //this.setAccountList(this.state.accountList.map((item: IAccountUI) => ({...item, selected: false})))
+      this.setAccountList(this.state.accountList.map((item: IAccountUI) => ({...item, selected: false})))
     }
   }
   addSelectedAccount = (id: number) => {
@@ -54,7 +60,7 @@ export default class Main extends React.Component<Props, IMain> {
     this.setState((prevState) => ({...prevState, accountList: this.state.accountList}))
   }
 
-  private mapMode = new Map<IModeSelected, Function>([
+  private mapMode = new Map<ClickMode, Function>([
     ["default", () => null],
     ["select", this.addSelectedAccount]
   ])
@@ -63,55 +69,44 @@ export default class Main extends React.Component<Props, IMain> {
     console.log("mode: ", this.state.mode)
     const styles = StyleSheet.create({
       app: {
-        flexDirection: "column",
-        flex:1
+        width: "100%",
+        height:"100%",
       },
       row: {
         flexDirection: "row",
-        flex:1
       },
       list: {
-        flex: 2,
-      },
-      buttonBg: {
-        flex: 0.5,
-        backgroundColor: "blue"
-      },
-      button: {
         width: "100%",
-        height: "100%",
-        justifyContent: "center"
+        height:"100%",
+        zIndex: 0
       },
-      deleteButton: {
-        backgroundColor: "red",
-        borderRadius: "50%",
-        padding: 25,
-        marginVertical: "auto",
-        marginHorizontal: 200,
-        flex: 0.9
-      }
     })
 
     return (
       <SafeAreaView style={styles.app}>
         <StatusBar
             animated={true}
-            backgroundColor="#61dafb"
+            backgroundColor={blue}
             // barStyle={statusBarStyle}
             hidden={false}
             />
         <View style={styles.list}>
-          <LogList {...this.state} switchMode={this.switchMode} onPress={this.mapMode.get(this.state.mode)}/>
+          <AccountList {...this.state} switchMode={this.switchMode} onPress={this.mapMode.get(this.state.mode)}/>
         </View>
         <BottomBar>
-          <PlayButton accountList={this.state.accountList} updateFunction={this.setAccountList}/>
-          { this.state.mode === "default" ?
-            <AddButton  data={this.state} addFunction={this.setAccountList}/>
-            :
-            <DeleteButton style={styles.deleteButton}
-                    data={this.state}
-                    deleteFunction={(array: IAccountUI[]) => {this.setMode("default"); this.setAccountList(array)}}/>
-          }
+            <View style={bottomBarStyles.element}/>
+            <View style={[bottomBarStyles.element, bottomBarStyles.mainElement]}>
+              <PlayButton accountList={this.state.accountList} updateFunction={this.setAccountList}/>
+            </View>
+            <View style={bottomBarStyles.element}>
+              { this.state.mode === "default" ?
+                <AddButton  data={this.state} addFunction={this.setAccountList}/>
+                :
+                <DeleteButton
+                        data={this.state}
+                        deleteFunction={(array: IAccountUI[]) => {this.setMode("default"); this.setAccountList(array)}}/>
+              }
+            </View>
         </BottomBar>
       </SafeAreaView>
     );

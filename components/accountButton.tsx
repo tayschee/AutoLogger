@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight, Pressable } from 'react-native';
 import Button from '@/components/button';
 import {styles} from "@/assets/styles/accountButton.ts"
-import { IModeSelected } from '@/interfaces/IModeSelected';
+import { ClickMode } from '@/interfaces/ClickMode';
 import IAccountUI from '@/interfaces/IAccountUI';
 
 interface Props {

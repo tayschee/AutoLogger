@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight, Pressable } from 'react-native';
 import Button from '@/components/button';
 import {styles} from "@/assets/styles/accountButton.ts"
-import { IModeSelected } from '@/interfaces/IModeSelected';
+import { ClickMode } from '@/interfaces/ClickMode';
 import IAccountUI from '@/interfaces/IAccountUI';
 
 interface Props {
   item: IAccountUI,
   switchMode: Function
   onPress: Function
-  mode: IModeSelected
+  mode: ClickMode
 }
 
 interface State {
@@ -24,7 +24,7 @@ export default class TextButton extends React.Component<Props, State> {
     }
   }
 
-  private mapMode = new Map<IModeSelected, Function>([
+  private mapMode = new Map<ClickMode, Function>([
     ["default", () => this.setState({logVisible: !this.state.logVisible})],
     ["select", () => null]
   ])
