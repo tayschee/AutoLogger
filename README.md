@@ -63,11 +63,7 @@ To start the app, use one of the following commands depending on the platform yo
     npm run ios
     ```
 
-## Usage
-
-Once the app is open, iyou can add an account of **Amour Sucré New Gen** and press play button everyday to collect your rewards. you can collect mutiple account in one time.
-
-### Adding a New Game
+## Adding a New Game
 
 If you wish to add support for a new game, you can follow these steps:
 
@@ -75,6 +71,10 @@ If you wish to add support for a new game, you can follow these steps:
 2. Implement the logic for collecting daily rewards for that game within this file.
 3. Ensure your code handles authentication and reward collection mechanisms for the new game.
 4. Update the main script to include the new game.
+
+## Usage
+
+Once the app is open, you can add an account of **Amour Sucré New Gen** and press play button everyday to collect your rewards. you can collect mutiple account in one time.
 
 ## Contributing
 
