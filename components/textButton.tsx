@@ -46,7 +46,6 @@ export default class TextButton extends React.Component<Props, State> {
       this.colorChoice(),     
     ]
     const date = new Date(this.props.item.date)
-    console.log("mode:", this.props.mode)
     return (
       <View>
         {

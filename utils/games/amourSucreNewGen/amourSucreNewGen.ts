@@ -69,13 +69,16 @@ async function findDayToCollect(apiKey: string): Promise<Number> {
 }
 
 async function collect(apiKey: String): Promise<IAutoLogResult> {
+    const body = JSON.stringify({"dayNumber": await findDayToCollect(apiKey)})
     const headers: Headers = new Headers({
-        "Authorization": `Bearer ${apiKey}`
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Content-Length": String(body.length),
     })
     const request = new Request("https://api.amoursucre-newgen.com/api/connection-calendar/collect", {
         method: "POST",
         headers: headers,
-        body: JSON.stringify({"dayNumber": await findDayToCollect(apiKey)})
+        body: body
     })
 
     const response = await fetch(request)

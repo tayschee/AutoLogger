@@ -53,7 +53,6 @@ export default function AccountForm({data, quitFunction, addFunction}) {
             <Pressable
                 style={styles2.button}
                 onPress={() => {
-                  console.log(data)
                     const id = data.accountList.length > 0 ? data.accountList[data.accountList.length -1].id + 1: 0
                     const newElement: IAccountUI =  {id: id, game: game, usernameOrEmail: usernameOrEmail, password: password, selected: false, message: "Account add to the database", date: new Date(Date.now()).toString() }
                     data.accountList.push(newElement)

@@ -66,7 +66,6 @@ export default class Main extends React.Component<Props, IMain> {
   ])
 
   render() {
-    console.log("mode: ", this.state.mode)
     const styles = StyleSheet.create({
       app: {
         width: "100%",

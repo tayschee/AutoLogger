@@ -6,8 +6,6 @@ import IAccountUI from '@/interfaces/IAccountUI';
 
 export default function AccountList({accountList, mode, switchMode, onPress })
 { 
-    console.log("mode", mode)
-    console.log("onPress", onPress)
     return (
       <View>
         <VirtualizedList
